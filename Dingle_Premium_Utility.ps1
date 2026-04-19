@@ -1,6 +1,6 @@
 # Dingle Premium Utility Script
 # A modern and improved version of EXM Premium Utility
-
+Add-Type -AssemblyName "System.Windows.Forms"
 Add-Type -TypeDefinition @'
 using System;
 using System.Windows.Forms;
