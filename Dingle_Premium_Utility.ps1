@@ -1,6 +1,10 @@
 # Dingle Premium Utility Script
 # A modern and improved version of EXM Premium Utility
+
+# Load the necessary Windows Forms assembly
 Add-Type -AssemblyName "System.Windows.Forms"
+
+# Define the GUI and main form
 Add-Type -TypeDefinition @'
 using System;
 using System.Windows.Forms;
@@ -77,6 +81,8 @@ public class MainForm : Form {
 [System.Windows.Forms.Application]::EnableVisualStyles()
 $form = New-Object MainForm
 $form.ShowDialog()
+
+# Function Definitions
 
 # Function to enable System Restore
 function Enable-SystemRestore {
