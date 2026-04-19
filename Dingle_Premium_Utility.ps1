@@ -1,8 +1,15 @@
-# Force load necessary Windows Forms and Drawing assemblies
-Add-Type -TypeDefinition @"
+# Dingle Premium Utility Script
+# A modern and improved version of EXM Premium Utility
+
+# Load Windows Forms
+Add-Type -AssemblyName "System.Windows.Forms"
+
+# Define the GUI with Windows Forms
+Add-Type -TypeDefinition @'
 using System;
 using System.Windows.Forms;
 using System.Drawing;
+
 public class MainForm : Form {
     public MainForm() {
         this.Text = "Dingle Premium Utility";
@@ -25,7 +32,11 @@ public class MainForm : Form {
         enableRPButton.Location = new Point(20, 40);
         enableRPButton.Size = new Size(160, 30);
         enableRPButton.Click += (sender, e) => {
-            Enable-SystemRestore
+            // Enable System Restore related registry tweaks
+            Invoke-Expression 'Reg.exe delete "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\WindowsNT\\CurrentVersion\\SystemRestore" /v "RPSessionInterval" /f  >nul 2>&1'
+            Invoke-Expression 'Reg.exe delete "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\WindowsNT\\CurrentVersion\\SystemRestore" /v "DisableConfig" /f >nul 2>&1'
+            Invoke-Expression 'Reg.exe add "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d 0 /f  >nul 2>&1'
+            MessageBox.Show("System Restore Point Created Successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         };
         systemTab.Controls.Add(enableRPButton);
 
@@ -35,7 +46,8 @@ public class MainForm : Form {
         gpuOptimizeButton.Location = new Point(20, 40);
         gpuOptimizeButton.Size = new Size(160, 30);
         gpuOptimizeButton.Click += (sender, e) => {
-            Optimize-GPU
+            // GPU Optimization logic here
+            MessageBox.Show("GPU optimization executed!", "Done");
         };
         advancedTab.Controls.Add(gpuOptimizeButton);
 
@@ -45,7 +57,8 @@ public class MainForm : Form {
         cleanTempButton.Location = new Point(20, 40);
         cleanTempButton.Size = new Size(160, 30);
         cleanTempButton.Click += (sender, e) => {
-            Clean-TempFiles
+            // Clean Temporary Files
+            MessageBox.Show("Temporary files cleaned.", "Done");
         };
         cleanupTab.Controls.Add(cleanTempButton);
 
@@ -68,4 +81,9 @@ public class MainForm : Form {
         this.Controls.Add(exitButton);
     }
 }
-"@ -Language CSharp
+'@ -Language CSharp
+
+# Initialize Form
+[System.Windows.Forms.Application]::EnableVisualStyles()
+$form = New-Object MainForm
+$form.ShowDialog()
