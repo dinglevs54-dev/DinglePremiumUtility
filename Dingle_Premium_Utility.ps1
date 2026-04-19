@@ -1,15 +1,8 @@
-# Dingle Premium Utility Script
-# A modern and improved version of EXM Premium Utility
-
-# Load the necessary Windows Forms assembly
-Add-Type -AssemblyName "System.Windows.Forms"
-
-# Define the GUI and main form
-Add-Type -TypeDefinition @'
+# Force load necessary Windows Forms and Drawing assemblies
+Add-Type -TypeDefinition @"
 using System;
 using System.Windows.Forms;
 using System.Drawing;
-
 public class MainForm : Form {
     public MainForm() {
         this.Text = "Dingle Premium Utility";
@@ -75,34 +68,4 @@ public class MainForm : Form {
         this.Controls.Add(exitButton);
     }
 }
-'@ -Language CSharp
-
-# Initialize Form
-[System.Windows.Forms.Application]::EnableVisualStyles()
-$form = New-Object MainForm
-$form.ShowDialog()
-
-# Function Definitions
-
-# Function to enable System Restore
-function Enable-SystemRestore {
-    Write-Host "Enabling System Restore..."
-    Invoke-Expression 'Reg.exe delete "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\WindowsNT\\CurrentVersion\\SystemRestore" /v "RPSessionInterval" /f  >nul 2>&1'
-    Invoke-Expression 'Reg.exe delete "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\WindowsNT\\CurrentVersion\\SystemRestore" /v "DisableConfig" /f >nul 2>&1'
-    Invoke-Expression 'Reg.exe add "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d 0 /f  >nul 2>&1'
-    Write-Host "System Restore Enabled."
-}
-
-# Function to optimize GPU settings
-function Optimize-GPU {
-    Write-Host "Optimizing GPU Settings..."
-    # Commands to tweak GPU settings (e.g., adjusting power settings, enabling high-performance mode)
-    Write-Host "GPU Optimized."
-}
-
-# Function to clean Temporary Files
-function Clean-TempFiles {
-    Write-Host "Cleaning Temporary Files..."
-    Remove-Item -Path "$env:temp\*" -Force
-    Write-Host "Temporary files cleaned."
-}
+"@ -Language CSharp
